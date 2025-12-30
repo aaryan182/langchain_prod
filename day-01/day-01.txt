@@ -1,0 +1,100 @@
+How LLM Systems fails in production 
+
+we do : 
+response = openai.chat.completions.create(...)
+print(response)
+
+It works in demo.
+It fails catastrophically in production
+
+ReaL production failures: 
+Invalid JSON crashes downstream ETL, Silent hallucinations stored in DB, Model latency spikes take down APIs, Prompt edits regress behaviour with no alerts, costs explode overnight, now way to explain why the model answered something
+
+
+A LLM is not a function.
+
+A function: deterministic, typed, predictable, testable
+
+A LLM : Probabilistic, weakly structured, context sensitive, can sound correct while being wrong
+
+
+
+=. How Production LLM Systems Are Actually Structured
+
+Think in systems not calls.
+
+High-level production architecture
+                ┌──────────────┐
+User Request ──▶│ API Layer     │
+                └──────┬───────┘
+                       │
+                       ▼
+                ┌──────────────┐
+                │ Orchestrator │  ← LangChain lives here
+                └──────┬───────┘
+          ┌────────────┼────────────┐
+          ▼            ▼            ▼
+   Prompt Logic   Memory / RAG    Tool Calls
+          │            │            │
+          └────────────┼────────────┘
+                       ▼
+                ┌──────────────┐
+                │ LLM Provider │
+                └──────────────┘
+                       │
+                       ▼
+                ┌──────────────┐
+                │ Validation   │
+                │ Guardrails   │
+                │ Logging      │
+                └──────────────┘
+
+=> Why raw LLM calls fails at scale
+
+Failure mode 1: Output is not a contract
+We ask for a JSON
+We get: missing fields, extra text, wrong types, slight formatting changes
+
+Downstream systems crash or silently corrupt data
+
+
+Failure mode 2: No Retry Semantics
+LLMs fail like networks: rate limits, timeouts, partial responses
+Raw SDK calls: no retries, no fallbacks, no circuit breakers
+
+
+Failure mode 3: No Observability
+In prod, someone asks:
+why did the model say this?, which prompt version was used, how much did this request cost? 
+we answer : don't know 
+
+That's a career limiting answer
+
+
+Failure mode 4: Prompt Drift
+Someone edits a prompt. Suddenly : Outputs change, edge cases break, no tests fail. THis is a prompt regression .
+
+
+Failure mode 5: Cost explosions
+Without routing : simple questions hit gpt-4, RAG pulls huge contexts unnecessarily, no caching, no budgets
+
+
+=> What LangChain Actually Is (And Is Not)
+LangChain is NOT: A magic wrapper, A chatbot framework, A prompt library
+
+LangChain IS: An LLM orchestration framework, A control plane for unreliable AI components
+
+A way to build deterministic systems around probabilistic models
+
+Treat LLMs like: an unreliable microservice, with variable latency, weak contracts, high cost per call
+
+Therefore every production LLM system needs:
+Prompt templates - because of versioned interfaces
+Output parsers - because of enforced structure
+Retries - Network like failure handling
+Memory - Context continuity
+RAG - Grounding
+Cost routing - Financial safety
+logging - Debuggability
+Evaluation - Regression prevention 
+
