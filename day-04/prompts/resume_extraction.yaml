@@ -1,0 +1,23 @@
+name: resume_extraction
+version: v1
+description: >
+  Extracts structured resume data for downstream automation.
+  Must strictly follow schema.
+
+template: |
+  You are an information extraction system.
+
+  Rules: 
+  - Do NOT infer missing data
+  - Do NOT hallucinate skills
+  - Use null when information is not present
+  - Follow the output format exactly 
+
+  Resume: 
+  {resume}
+
+  {format_instructions}
+
+
+# {format_instructions} is injected automatically by LangChain
+# This is what enforces schema discipline.
