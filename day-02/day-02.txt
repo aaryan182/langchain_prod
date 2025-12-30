@@ -1,0 +1,51 @@
+Langchain Core Abstractions 
+
+The minimum LangChain building blocks required to build production system.
+
+=> we start with : 
+
+response = client.chat.completions.create(...)
+
+then we need to : add memory, add rag, add retries, add tools, add logging, add cost running
+
+Suddenly the code becomes: unreadable, un testable, impossible to refractor, full of if/else spaghetti
+
+
+=> Why langchain instead of raw SDK calls
+Raw SDK gives : one request -> one response
+
+Langchian gives: composable execution graphs, typed inputs/outputs, reusable pipelines, observable boundaries
+
+We dont call llms in production we orchestrate them.
+
+
+=> The 4 Core Abstractions
+
+Everything in LangChain reduces to four primitives:
+
+Primitive	        What it really is	    Why it exists
+PromptTemplate	    Input contract	        Prevent prompt drift
+Runnable	        Executable node	        Composability
+Chain (LCEL)	    Directed graph	        Deterministic orchestration
+OutputParser	    Output contract	        Downstream safety
+
+
+=> LCEL ( Langchain Expression Language)
+
+Mental Model => LCEL is Unix pipes for LLM systems
+input -> prompt -> model -> parser -> output
+
+Each stage: has a contract, can be logged, can be swapped, can fail independently
+
+
+=> Folder structure
+
+
+
+Interviewer:
+Explain LCEL.
+Weak answer:
+It’s how you chain components.
+
+Strong answer:
+LCEL lets us build explicit, inspectable execution graphs where each node has a contract. This makes LLM systems refactorable, testable and observable unlike raw SDK calls.
