@@ -1,0 +1,63 @@
+Learning how prompts are treated like APIs in real companies - with ownership , versioning, guardrails and regression control.
+
+In real teams, this happens constantly: Someone just tweaks the prompt, output tone changes, edge case break, downstream parsers fail, nobody knows why 
+
+this is called promptdrift and it causes silent regression, broken automations, loss of trust in AI systems
+
+
+=> WHy langchain is used here: 
+Raw approach : prompt = f"You are helpful. Answer this: {input}"
+
+Production problems: no versioning, no ownership, no review process, impossible to audit, impossible to test
+
+Langchain's PromptTemplate exists to make prompts: explicit, parametrized, reusuable, testable, reviewable
+
+A prompt is not text, a prompt is a contract.
+
+Prompts must be treated as: API schemas, SQL migrations, feature flags
+
+that means: they live outside buisness logic, they are versioned, they have strict inputs, they enforce behavior boundaries
+
+
+=> Production Architecture for Prompts
+          ┌───────────────────┐
+          │ Prompt Registry   │  ← YAML / JSON / DB
+          └─────────┬─────────┘
+                    │
+                    ▼
+            PromptTemplate
+                    │
+                    ▼
+                 Chain
+                    │
+                    ▼
+               Validation
+
+
+Prompts are data, not code.
+
+
+=> Common Production Mistakes 
+
+Prompt strings inside code
+No prompt versioning
+We’ll remember what we changed
+Overloaded prompts with business logic
+No explicit rules section
+
+=> How This Breaks in Production (If Done Wrong)
+
+Slight wording change → different reasoning
+Model upgrades amplify prompt sensitivity
+RAG context interacts unpredictably
+Output parsers fail due to tone changes
+
+
+=> Interviewer:
+How do you manage prompts in production?
+
+Junior answer:
+We store them in code.
+
+Senior answer:
+Prompts are treated as versioned interfaces. They’re externalized, reviewed like code, tested against golden inputs and rolled out with explicit version pinning to prevent regressions.

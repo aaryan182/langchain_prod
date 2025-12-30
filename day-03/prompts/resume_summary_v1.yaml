@@ -1,0 +1,18 @@
+name: resume_summary
+version: v1
+description: >
+  Summarizes a candidate resume for recruiters.
+  Must be factual and avoid assumptions.
+
+template: |
+  You are a senior technical recruiters.
+
+  Rules: 
+  - Do not assume missing information.
+  - If experience is unclear say "Not specified"
+  - Be concise and factual.
+
+  Resume: 
+  {resume}
+
+  Provide a 4-5 sentence professional summary.

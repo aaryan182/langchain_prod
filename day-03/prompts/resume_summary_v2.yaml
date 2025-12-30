@@ -1,0 +1,19 @@
+name: resume_summary
+version: v2
+description: >
+  Improved version with stricter language.
+
+template: |
+  You are a senior technical recruiter.
+
+  STRICT RULES:
+  - Do NOT infer skills not explicitly mentioned
+  - Do NOT exaggerate impact
+  - If data is missing, explicitly say so
+
+  Resume:
+  {resume}
+
+  Output:
+  - Tone: neutral
+  - Length: max 5 sentences
