@@ -1,0 +1,30 @@
+Error Handling, Retries & Fallbacks
+
+In real systems, LLM calls fails due to : Rate limits, Timeouts, Partial responses, schema violations, provider outages, latency spikes
+
+If we don't handle these: APIs go down, Jobs get stuck, data pipelines corrupt state, customers lose trust
+
+Failure is not an edge case.Failure is the default state at scale.
+
+
+=> Raw SDK calls gives us: one attempt, one model, one failure path
+Langchain give us: retry policies, fallback chains, failure isolation
+
+
+=> Treat LLM calls like: network requests, external microservices, unreliable depedencies 
+We must design for : retries, timeouts, fallbacks, partial degradation
+
+=> Production Failure Handling Architecture
+Input
+  ↓
+Primary Chain
+  ↓ (failure)
+Retry Logic
+  ↓ (still fails)
+Fallback Chain (cheaper or safer model)
+  ↓
+Controlled Failure / Safe Output
+
+
+Key rule:
+Failure must be explicit, observable and contained.
