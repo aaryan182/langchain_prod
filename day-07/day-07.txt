@@ -1,0 +1,46 @@
+Tools & Tool Calling
+
+Pure text responses are not enough.
+Real systems must: query databases, call internal APIs, Trigger workflows, Fetch documents, Perform calculations, Look up polices
+
+without tools: we hardcode logic, duplicate business rules, lose flexibility
+
+Without safe tool calling: expose dangerous operations, risk prompt injection, lose auditablity
+
+
+=> Langchain is used ?
+DIY approach: 
+if "fetch user" in llm_output: 
+    call_api()
+
+This falls because: no schema, no validation, no safety boundary, no traceability
+
+Langchain tools provide: typed input contracts, explicit execution boundaries, auditable decisions, separation of reasoning vs execution
+The LLM decides, your system executes.
+
+
+
+A Tool is: a trusted function, with a strict schema, that the LLM can request but not execute directly
+
+The LLM never runs code. It only emits intent.
+
+=> Production Architecture for Tools
+User Input
+   ↓
+LLM (decides intent)
+   ↓
+Tool Call (validated schema)
+   ↓
+Trusted Function Execution
+   ↓
+Result back to LLM or system
+
+
+Key rule:
+LLMs propose actions. Systems approve and execute them.
+
+
+How do you safely let LLMs call tools?
+
+answer:
+LLMs never execute tools directly. They emit structured intent, validated by schemas. The system owns execution, logging and safety boundaries.
