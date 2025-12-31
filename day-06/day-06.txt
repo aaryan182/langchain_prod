@@ -1,0 +1,49 @@
+Chains as DAGs ( Runnable Sequence & RunnableParallel)
+
+Real systems rarely do one thing:
+Example: classify input, extract structured data, generate a summary, run compliance checks, decide next action
+
+If you do this linearly:
+latency explodes, cost increase, code becomes unreadable 
+DAG based orchestration is mandatory
+
+
+Langchain assumes:
+multiple steps, independent computations, partial reuse of results, controlled data flow
+
+so instead of chains, langchain really gives us: composable DAG nodes ( runnables)
+
+
+=> A Langchain Runnable is: 
+a node in a DAG, with input -> output extract , executable sync or async, composable with other nodes
+
+Two core composition types:
+Type	                When to use
+RunnableSequence         (`	`)
+RunnableParallel	     Independent tasks
+
+
+=> Production DAG Example 
+
+Build a resume processing DAG:
+
+                ┌─────────────┐
+Input Resume ──▶│ Classifier  │──┐
+                └─────────────┘  │
+                                 ├──▶ Merge ─▶ Final Output
+                ┌─────────────┐  │
+Input Resume ──▶│ Extractor   │──┘
+                └─────────────┘
+
+
+Why this matters:
+Classifier & extractor are independent
+Can run in parallel
+Latency cut almost in half
+
+
+
+How do you design complex LangChain workflows?
+
+Answer:
+I treat LangChain runnables as DAG nodes. Independent steps run in parallel using RunnableParallel, dependent steps use sequences and explicit merge nodes keep data flow deterministic and debuggable.
