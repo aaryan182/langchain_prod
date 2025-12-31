@@ -1,0 +1,42 @@
+Memory: Short Term, Long Term, Vector Memory
+
+Without memory: assistant feels dumb, users repeat themselves, context is lost
+
+with bad memory: Token usage explodes, latency increases, old context pollutes reasoning, the model hallucinates based on stale info
+
+
+Why langchain is needed for memory: 
+Raw SDK approach: 
+messages.append(previous_message)
+
+This fails because: no memory boundaries, no summarization, no lifecycle management, no separation of concern
+
+Langchain treats memory as:
+a controlled data source with rules
+
+
+There are THREE types of memory:
+
+Type	                Purpose	                        Lifetime
+Short term memory	    Conversation continuity	        Request/session
+Long term memory	    User or system facts	        Weeks/months
+Vector memory	        Semantic recall	                Persistent
+
+
+Memory Architecture
+
+User Input
+   ↓
+Short-Term Memory (recent turns)
+   ↓
+Retriever (vector memory)
+   ↓
+Relevant Context
+   ↓
+LLM
+   ↓
+Validated Output
+
+
+Key insight:
+Memory is retrieved not dumped
