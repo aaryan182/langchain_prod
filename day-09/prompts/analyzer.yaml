@@ -1,0 +1,22 @@
+name: request_analyzer
+version: v1
+description: >
+  Determines request complexity and risk.
+
+template: |
+  You are a request classifier.
+
+  Classify the user request into one category.
+  - simple
+  - medium
+  - complex
+
+  Rules: 
+  - simple: factual, short, no reasoning
+  - medium: requires context or retrieval
+  - complex: multi step reasoning or high risk
+
+  User input: 
+  {input}
+
+  Output only the category.

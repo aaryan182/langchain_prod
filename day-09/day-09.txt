@@ -1,0 +1,61 @@
+Designing LLM systems that optimize for cost, latency and reliability without sacrificing correctness
+
+What most teams do is : use gpt-4/ claude sonnet for everything, no routing, no caching, no budgets, no visibility
+
+What happens: cloud bill explodes, latency is high, simple task are overpriced, product gets blocked
+
+Why langchain? => Raw SDK calls: bind you to one model, hardcode pricing assumptions, make routing messy and ad hoc
+
+Langchain lets us: treat models as interchangeable nodes, route dynamically, build cost aware DAGs, add policies without rewriting logic
+
+Not all requests deserve the same model
+
+Think in tiers:
+
+Tier	Example tasks	                    Model type
+Tier 0	Classification, extraction	        Cheap, fast
+Tier 1	RAG answers	                        Mid-range
+Tier 2	Complex reasoning	                Expensive
+Tier 3	Human critical	                    Best + HITL
+
+Routing is policy driven.
+
+
+Production Cost Aware Architecture
+User Input
+   ↓
+Request Analyzer (cheap)
+   ↓
+Complexity / Risk Score
+   ↓
+Model Router
+   ├── Cheap Model
+   ├── Mid Model
+   └── Expensive Model
+
+
+Key idea:
+
+We don’t ask the LLM which model to use.
+We decide.
+
+We built:
+
+A model router
+A cost policy
+Tiered execution
+Centralized control
+
+This pattern is used in:
+
+SaaS copilots
+Enterprise RAG
+Support bots
+AI platforms
+
+
+How do you control LLM costs?
+
+Answer:
+
+We route requests based on complexity and risk. Cheap models handle simple tasks, stronger models are reserved for complex or high impact requests. Routing logic is explicit and policy driven.
