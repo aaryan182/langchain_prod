@@ -1,0 +1,32 @@
+Production RAG with confidence scoring & abstention
+
+Building a RAG system that: computes confidence scores, abstains when evidence is weak, avoids confident hallucinations, produces auditable answers
+
+Classic RAG failure:
+System answers confidently, answer is not supported by documents, users lose trust permanently
+
+Raw SDK RAG: no structured scoring, no confidence calibration, no abstention mechanism, hard to enforce policies
+
+Langchain lets us: add scoring chains, enforce schemas, build decision gates, keep logic composable
+
+RAG answerablity has 3 dimensions: 
+retrieval strength - are documents relevant?
+coverage - do docs contain the answer?
+answer grounding - is output supported?
+
+Production Architecture 
+User Question
+   ↓
+Retriever (high recall)
+   ↓
+Compression + Reranking
+   ↓
+Evidence Strength Scoring
+   ↓
+Answer Generator
+   ↓
+Confidence Gate
+   ├── Confident → Answer + score
+   └── Low confidence → Abstain
+
+We don’t just retrieve and answer. We score evidence strength and enforce abstention when confidence is low. This prevents hallucinations and builds user trust.

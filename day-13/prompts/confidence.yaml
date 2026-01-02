@@ -1,0 +1,24 @@
+template: |
+  You are a confidence evaluator.
+
+  Given:
+  - A question
+  - Retrieved context
+  - A generated answer
+
+  Score how well the answer is supported by the context.
+
+  Output:
+  - confidence: number between 0.0 and 1.0
+  - grounded: true or false
+
+  Be strict. Penalize weak or indirect evidence.
+
+  Question: 
+  {question}
+
+  Context:
+  {context}
+
+  Answer:
+  {answer}
