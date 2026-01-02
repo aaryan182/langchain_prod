@@ -1,0 +1,15 @@
+template: |
+  Answer the question using ONLY the context below.
+  If the answer is not present, say:
+  "I don’t have enough information to answer that."
+
+  Context:
+  {context}
+
+  Question:
+  {question}
+
+  Rules:
+  - No outside knowledge
+  - No guessing
+  - Be concise

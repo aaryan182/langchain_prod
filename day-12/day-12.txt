@@ -1,0 +1,89 @@
+Advanced Retrieval
+
+Compression, Reranking and Precision Tuning
+
+Building a high precision retrieval pipeline that: reduces irrelevant context, improves answer grounding, controls token usage, scales to large corpora
+
+
+Even with basic RAG: 
+top- k retrieval returns noisy chunks
+similarity != relevance
+long contexts dilute signal
+models hallucinate despite having docs
+
+Symptoms we see are: 
+correct answers sometimes
+confident wrong answers often
+Huge token bills
+"RAG doesn't work" complaints
+
+This problems is retrieval quality not the LLM.
+
+
+Without Langchain : we hand roll reranking logic, hard to swap retrievers, no standard compression interface, messy experimentation
+
+Langchain gives: retriever abstraction, compression pipelines, reranking hooks, clean composition
+
+Advanced RAG = retrieval engineering, not prompting
+
+
+
+Retrieval happens in stages
+
+Query
+ ↓
+Wide Recall (cheap, vector similarity)
+ ↓
+Compression (remove junk)
+ ↓
+Reranking (semantic relevance)
+ ↓
+Final Context (small, precise)
+
+
+Key rule:
+Recall first precision second
+
+
+Production Architecture 
+
+User Question
+   ↓
+Vector Retriever (k=8)
+   ↓
+Context Compressor
+   ↓
+Reranker
+   ↓
+Top-N High Quality Chunks
+   ↓
+Grounded Prompt → LLM
+
+
+This pattern is used in:
+
+Enterprise search
+Legal assistants
+Healthcare knowledge systems
+Financial research tools
+
+
+
+Why This Works Better Than Day 11
+
+Improvement	Benefit
+Higher recall (k=8)	Fewer missed facts
+Compression	Less noise
+Shorter context	Better grounding
+Deterministic rules	Fewer hallucinations
+
+This is real RAG engineering.
+
+
+Common Mistakes 
+
+ Increasing k endlessly
+ Dumping compressed + raw docs
+ Using expensive models for compression
+ No abstention rule
+ Treating RAG as “prompt trick”
