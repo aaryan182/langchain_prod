@@ -1,0 +1,74 @@
+Building a RAG(Retrieval Augmented Generation) pipeline with:
+proper chunking, deterministic Retrieval, grounded prompting, clear failure nodes
+
+
+Naive RAG systems: hallucinate even with documents, retrieve irrelevant chunks, overstuff context windows, answer confidently when data is missing
+
+Result: Users don't trust the system, legal blocks rollout
+
+RAG failures are almost always system design failures
+
+
+=> Why langchain is needed for RAG 
+
+Raw SDK + embeddings : no retrieval abstraction, no compression, no prompt discipline, no observability
+
+
+Langchain provides: standard retriever interfaces, vector store abstraction, prompt retriever LLM composition, extensible RAG patterns
+
+
+RAG is orchestration not an embedding call
+
+
+RAG has four independent failure points: 
+Chunking - wrong size = bad recall
+Retrieval - similarity != relevance
+Context injection - too much = noise
+Answer policy - model should abstain
+
+If we don't controll all four RAG will hallucinate
+
+
+
+=> RAG Architecture
+
+User Question
+    ↓
+Query Embedding
+    ↓
+Retriever (top k)
+    ↓
+Context Selection (bounded)
+    ↓
+Grounded Prompt
+    ↓
+LLM
+    ↓
+Answer OR Explicit “Not Found”
+
+
+Key rule:
+No document → no answer
+
+
+
+Why Most RAG Systems Fail?
+
+Mistake	                        Result
+Dumping full docs	            Hallucinations
+No abstention rule	            Confident lies
+Large chunks	                Poor recall
+Small chunks	                Fragmented context
+“Top-k=10” blindly	            Noise
+
+RAG is about precision not volume.
+
+
+Explain RAG
+
+Bad answer:
+
+We embed documents and pass them to GPT.
+
+Good answer:
+We treat retrieval as a first class system. Chunks are tuned, context is bounded, prompts enforce grounding and the model is required to abstain when evidence is missing.
