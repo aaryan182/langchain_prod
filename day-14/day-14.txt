@@ -1,0 +1,30 @@
+Evaluation and Regression Testing for LLM Systems
+
+What usually happens in LLM teams: prompt is changed, Looks better in  manual testing, shipped to prod, silent Regression, trust is lost, nobody knows why
+
+Traditional unit tests do not work for LLMs. But no tests is unacceptable
+
+
+Why Langchain is used for Evaluation?
+Raw SDK testing: Hard to standardize, no schema enforcement, no reusable evaluators, no scoring discipline
+
+Langchain gives: structured eval chains, reusable evaluators, deterministic harnesses, clean separation of concerns
+
+
+
+We cannot test correctness, we must test consistency.
+
+LLM evaluation focuses on: 
+Did system abstain when it should? Did the answer remain grounded? Did confidence drop for weak evidence? Did behavior change across versions?
+
+
+
+This Enables in Production
+
+With this harness, we can:
+Test prompt changes before merging
+Compare model versions
+Catch hallucination regressions
+Enforce abstention policies
+Track quality over time
+This is CI for LLM systems.

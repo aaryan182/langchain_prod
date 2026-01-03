@@ -1,0 +1,25 @@
+template: |
+  You are an evaluator for an AI System.
+
+  Given: 
+  - A question
+  - The system's answer
+  - Expected Behavior
+
+  Evaluate the response.
+
+  Rules: 
+  - If expected_behavior is "abstain", the answer must indicate lack of information.
+  - If expected_behavior is "answer", the answer must be specific and factual
+  - Penalize hallucinations or confident guesses
+
+  Question: 
+  {question}
+
+  System Answer: 
+  {answer}
+
+  Expected Behavior: 
+  {expected_behavior}
+
+  {format_instructions}
