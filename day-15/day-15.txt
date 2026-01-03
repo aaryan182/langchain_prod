@@ -1,0 +1,61 @@
+Tracing Decisions, Cost and Failures
+
+Adding full observability to our Langchain systems so we can:
+Debug hallucinations, trace decision paths, track cost and latency, investigate failures post incident
+
+
+What happens in prod without observability:
+User reports: "The bot answered wrongly"
+we don't know: which prompt version was used, which documents were retrieved, which model ran, how confident the system was
+
+Finance asks: Why did costs spike yesterday?
+we have no answer.
+
+
+Langchain Helps? it gives runnable boundaries, execution graph structure, hooks for callbacks
+
+observability is a system concern not a library feature.
+
+
+Every LLM request must produce:
+
+Signal	                Why
+Input	                Reproducibility
+Prompt version	        Regression analysis
+Retrieved context	    Hallucination debugging
+Model used	            Cost + quality
+Output	                User-visible
+Latency	                Performance
+Cost	                Finance control
+Errors	                Incident response
+
+If any of these are missing → blind system.
+
+
+Observability Architecture 
+
+Request
+  ↓
+Trace ID
+  ↓
+Chain Execution
+  ├── Prompt version
+  ├── Model used
+  ├── Retrieved docs
+  ├── Confidence score
+  ├── Cost estimate
+  ↓
+Logs + Metrics + Traces
+
+
+From logs alone, we can answer:
+
+Why did the model say this?
+Which documents influenced the answer?
+How confident was it?
+How long did it take?
+How much did it cost?
+Where did it fail?
+
+
+We add structured logging and tracing around every LLM call. Each request emits a trace ID, retrieval context, model metadata, confidence, latency and cost estimates so failures and regressions are debuggable.
