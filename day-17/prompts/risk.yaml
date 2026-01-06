@@ -1,0 +1,21 @@
+template: |
+  You are a risk evaluator.
+
+  Given:
+  - Proposed action
+  - rationale
+
+  Assess:
+  - confidence (0.0-1.0)
+  - risk level (low, medium, high)
+  - whether human approval is required
+
+  Be conservative
+
+  Action:
+  {action}
+
+  rationale:
+  {rationale}
+
+  {format_instructions}
