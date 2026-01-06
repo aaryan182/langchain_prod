@@ -1,0 +1,73 @@
+User waits LLM responds
+The above does not scale.
+
+Learning how to design LLM systems that:
+Run async without blocking APIs
+Offload heavy work to background jobs
+Handle retries, failures and long running tasks
+
+Synchronous LLM execution breaks when:
+Requests take 10 - 60 seconds
+we do multi step RAG or agents
+we process documents(PDFs, videos, IDP)
+we run evaluations or research tasks
+
+Symptoms: API timeouts, Poor UX, wasted compute, horizontal scaling becomes imporssible
+
+LLMs are slow. APIs must not be
+
+
+Separate interaction from execution
+
+Layer	            Responsibility
+API	                Accept request, validate, enqueue
+Worker	            Run LLM chain / agent
+Storage	            Persist result
+Client	            Poll or receive callback
+
+This is how:
+Email sending works
+Video processing works
+Payment processing works
+
+LLMs are no different.
+
+
+Langchain supports async execution(ainvoke)
+Keeps orchestration logic reusable
+Lets the same chain run in : API, worker, Batch job
+
+Async is an execution concern not an LLM concern
+
+
+Production Async Architecture
+
+Client
+  ↓
+FastAPI (POST /jobs)
+  ↓
+Queue (Redis / SQS / DB)
+  ↓
+Worker (LangChain chains)
+  ↓
+Result Store
+  ↓
+Client polls / webhook
+
+
+built:
+
+Non-blocking API
+Background worker
+Async LangChain execution
+Queue based scaling
+
+This pattern is used in:
+
+Document processing
+Research agents
+Batch RAG
+Evaluation pipelines
+
+
+We decouple request handling from LLM execution using background workers. APIs enqueue jobs and return immediately, workers execute LangChain chains asynchronously and results are fetched later
