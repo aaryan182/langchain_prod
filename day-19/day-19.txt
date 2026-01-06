@@ -1,0 +1,74 @@
+Deployment Patterns
+
+Turn our async LLM system into real deployable service with:
+Clear process boundaries
+API vs worker separation
+Environment based config
+Safe startup & shutdown
+A layout that ops teams actually accept
+
+Common anti patterns in LLM products:
+API and LLM logic mixed in one progress
+Background tasks running inside web servers
+No separation of concerns
+No clear scaling strategy
+
+In production this causes: API timeouts, Memory leaks, Impossible scaling, Painful on call incidents
+
+
+One rule we must remember: 
+Web servers handle HTTP. Workers handle work. 
+
+Never mix it.
+
+
+Canonical Production Architecture
+            ┌──────────────┐
+Client ───▶ │ API Service  │  (FastAPI)
+            └──────┬───────┘
+                   │ enqueue job
+                   ▼
+            ┌──────────────┐
+            │ Queue        │  (Redis / SQS)
+            └──────┬───────┘
+                   │ consume job
+                   ▼
+            ┌──────────────┐
+            │ Worker       │  (LangChain)
+            └──────────────┘
+
+
+Scaling rules:
+
+Scale API by requests/sec
+Scale workers by jobs/sec
+
+
+Concern       	        API	                    Worker
+Latency	                Must be low	            Can be high
+Retries	                No	                    Yes
+Timeouts	            Strict	                Relaxed
+Memory	                Small	                Larger
+Scaling	                Horizontal	            Horizontal
+
+Mixing these = production failure
+
+
+now have:
+Clean process separation
+Deployable API service
+Independent worker service
+Shared LangChain logic
+Horizontal scaling capability
+
+This is real production engineering.
+
+Common Deployment Mistakes 
+ LLM calls inside API handlers
+ Background tasks in FastAPI
+ Shared global state across services
+ No job abstraction
+ One process does everything
+
+
+We separate API and worker processes. The API handles HTTP and enqueues jobs. Workers consume jobs and run LangChain chains asynchronously. This allows independent scaling and avoids blocking request threads.
