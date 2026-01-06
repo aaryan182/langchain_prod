@@ -1,0 +1,54 @@
+ReAct, Tool Agents and Controlled Autonomy
+
+Learning when agents are justified, how to build them safely and how to constrain autonomy so they don't turn into unreliable decisions.
+
+If we misuse agents we will: increase latency, increase cost, reduce determinism, make systems impossible to debug
+
+Chains break down when: 
+the number of steps is unknown upfront, decisions depend on intermediate results, the system must choose which tool to call next
+
+Example real task: customer support troubleshooting, multi step research, incident investigation, knowledge discovery across tools
+
+Trying to do this with fixed DAGs leads to: huge if else logic, explosion of chains, unmaintainable code
+
+
+=> Why Agents Exist: 
+Chains: Deterministic, Fixed Structure, Predictable, Cheap, Easy to debug
+
+Agents: Dynamic, self directed, tool selecting, expensive, harder to reason about
+
+Agents are for exploration not pipelines
+
+If we can predefine steps => use chains
+If steps are unknown => consider agents
+
+=> The ReAct Pattern 
+ReAct = Reason + Act
+
+Thought -> Action -> Observation -> Thought -> ...
+
+The LLM reasons in text, 
+but the system executes tools.
+
+
+
+Production Architecture for Agents: 
+
+User Goal
+   ↓
+Agent (reasoning loop)
+   ↓
+Tool Selection (schema validated)
+   ↓
+Tool Execution (trusted)
+   ↓
+Observation
+   ↓
+Repeat or Finish
+
+
+Important:
+
+Max iterations
+Tool allow list
+Explicit stop condition
