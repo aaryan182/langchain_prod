@@ -1,0 +1,52 @@
+Langchain vs LangGraph
+
+Determinism, Control and Multi agent Orchestration 
+
+Understand, Design and implement correct Orchestration choices between:
+Chains, Agents, LangGraph state machines
+
+Most LLM systems fail not because of models but because of bad Orchestration choices.
+
+Typical Failures: agents looping forever, hard to debug behavior, non deterministic outcomes, impossible to test, impossible to audit, massive cost overruns
+
+Root cause: Using agents where workflows were required.
+
+Is the control flow known upfront 
+
+
+Three Orchestration Paradigms 
+
+=> Chains ( Langchain LCEL )
+Use when: steps are known, flow in linear or DAG like, Determinism is required, High throughput matters 
+
+Examples: RAG pipelines, Resume tailoring, IDP, Evaluation pipelines
+
+Properties: deterministic, Cheap, Easy to test, Easy to scale
+
+
+=> Agents ( ReACT, Tool Agents)
+Use when: Steps are known, exploration is required, tool selection is dynamic
+
+Examples: Research assistants, troubleshooting bots, interactive copilots
+
+Properties: Non deterministic, expensive, harder to debug, must be constrained
+
+
+=> Graphs ( LangGraph )
+Use when: flow is known, but conditional, cyclical or stateful, human in the loop exists, multi agent coordination exists
+
+Example: Approval workflows, compliance pipelines, multi agent research systems, stateful assistants
+
+LangGraph is NOT an agent framework. It is a state machine for LLM systems.
+
+
+
+LangChain alone: Great for pipelines, Weak for stateful workflows, 
+
+No first class notion of: State, Transitions, Cycles, Pauses, Human approval
+
+LangGraph was created to solve:
+LLM systems with control flow.
+
+
+LangChain chains are best for deterministic pipelines. Agents are used only when steps are unknown. LangGraph is for stateful, conditional workflows like approvals or multi agent coordination. It gives us explicit state and control flow.
